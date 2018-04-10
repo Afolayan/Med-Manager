@@ -1,20 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.afolayan.med_manager">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:name=".app.MedManager"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_main"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        android:theme="@style/MedManagerAppTheme"
+        tools:replace="android:icon">
+        <!--<meta-data
+            android:name="DATABASE"
+            android:value="medication.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="com.afolayan.med_manager" />-->
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="bc5fe9816e0cf777844e94d019b9fa3511242e18" />
+
+        <activity
+            android:name=".MedicationActivity"
+            android:label="@string/title_activity_medication"
+            android:theme="@style/MedManagerAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".NewMedicationActivity"
+            android:label="@string/new_medication"
+            android:theme="@style/MedManagerAppTheme"/>
+        <activity
+            android:name=".UserProfileActivity"
+            android:label="@string/title_activity_user_profile"
+            android:parentActivityName=".MedicationActivity"
+            android:theme="@style/MedManagerAppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.afolayan.med_manager.MedicationActivity" />
         </activity>
     </application>
 
