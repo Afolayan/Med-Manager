@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "633481090758",
+    "firebase_url": "https://startapp-88e7d.firebaseio.com",
+    "project_id": "startapp-88e7d",
+    "storage_bucket": "startapp-88e7d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:633481090758:android:00b7963399c79aca",
+        "android_client_info": {
+          "package_name": "com.afolayan.med_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "633481090758-n5qko56vi2po5fu3tbulraqd9b47j98q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.afolayan.med_manager",
+            "certificate_hash": "3d96fd3c234ad5bd43b1e01898efa01aa9fc7b2f"
+          }
+        },
+        {
+          "client_id": "633481090758-3qi68mfh2h645fiddu3v95k09vhp0jar.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLAaPNBPJj_epoWmMW2PtZUQlxcRrm1DM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "633481090758-3qi68mfh2h645fiddu3v95k09vhp0jar.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

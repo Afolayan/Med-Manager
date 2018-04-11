@@ -1,9 +1,9 @@
 package com.afolayan.med_manager.database.viewmodel;
 
+import android.app.Activity;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 
 import com.afolayan.med_manager.database.MedManagerDatabase;
 import com.afolayan.med_manager.database.interfaces.SingleUserListener;
@@ -15,7 +15,8 @@ public class UserViewModel {
     private MedManagerDatabase managerDatabase;
     private LiveData<List<User>> userList;
 
-    public UserViewModel(@NonNull Application application){
+    public UserViewModel(Activity activity){
+        Application application = activity.getApplication();
         managerDatabase = MedManagerDatabase.getDatabase(application);
         userList = managerDatabase.userDao().getSavedUsers();
     }

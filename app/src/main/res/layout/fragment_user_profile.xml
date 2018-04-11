@@ -1,10 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/dimens_10"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.afolayan.med_manager.UserProfileFragment"
     tools:showIn="@layout/activity_user_profile">
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:id="@+id/iv_user_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/ic_account_circle"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/user_image"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:visibility="gone"
+        android:labelFor="@id/et_user_name"/>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/user_name_Layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dimens_10"
+        android:textColorHint="@color/colorPrimary"
+        android:hint="Name"
+        app:hintEnabled="true">
+        <EditText
+            android:id="@+id/et_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:padding="@dimen/dimens_10"
+            android:gravity="center_horizontal"
+            android:textAlignment="center"
+            android:inputType="text"
+            android:enabled="false"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="@color/colorPrimary"
+            android:textSize="15sp"
+            android:theme="@style/EditTextTheme" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:visibility="gone"
+        android:labelFor="@id/et_user_age"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/user_age_Layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorPrimary"
+        android:hint="@string/age"
+        android:layout_margin="@dimen/dimens_10"
+        app:hintEnabled="true">
+        <EditText
+            android:id="@+id/et_user_age"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:padding="@dimen/dimens_10"
+            android:gravity="center_horizontal"
+            android:textAlignment="center"
+            android:inputType="text"
+            android:enabled="false"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="@color/colorPrimary"
+            android:textSize="15sp"
+            android:theme="@style/EditTextTheme" />
+
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/user_allergies_Layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorPrimary"
+        android:hint="Allergies"
+        android:layout_margin="@dimen/dimens_10"
+        app:hintEnabled="true">
+        <EditText
+            android:id="@+id/et_user_allergies"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:lines="5"
+            android:padding="@dimen/dimens_10"
+            android:gravity="center_horizontal"
+            android:textAlignment="center"
+            android:inputType="textMultiLine"
+            android:enabled="false"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="@color/colorPrimary"
+            android:textSize="15sp"
+            android:theme="@style/EditTextTheme" />
+
+    </android.support.design.widget.TextInputLayout>
+</LinearLayout>

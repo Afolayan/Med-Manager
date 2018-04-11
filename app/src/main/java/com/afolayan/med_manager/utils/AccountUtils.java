@@ -13,9 +13,9 @@ public class AccountUtils {
     public static final String SIGNED_IN = "signed_in";
     public static final String USER_EMAIL = "user_email";
 
-    public static void setSignedIn(Context context){
+    public static void setSignedIn(Context context, boolean signedIn){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        preferences.edit().putBoolean(SIGNED_IN, true).apply();
+        preferences.edit().putBoolean(SIGNED_IN, signedIn).apply();
     }
     public static boolean hasSignedIn(Context context){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);

@@ -12,10 +12,12 @@ import java.io.Serializable;
 @Entity
 public class User implements Serializable{
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private long id;
     private String name;
     private String email;
+    private String allergies;
+    private String photoUrl;
     private int age;
     
     public User() {
@@ -54,10 +56,28 @@ public class User implements Serializable{
         this.age = age;
     }
 
+    public String getAllergies() {
+        return allergies;
+    }
+
+    public void setAllergies(String allergies) {
+        this.allergies = allergies;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
     @Override
     public String toString() {
         return "User info\nname:"+name
                 +"\nemail: "+email
-                +"\nage: "+age;
+                +"\nage: "+age
+                +"\nphotoUrl: "+photoUrl
+                +"\nallergies: "+allergies;
     }
 }
