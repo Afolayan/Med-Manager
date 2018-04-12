@@ -36,8 +36,9 @@
         <LinearLayout android:id="@+id/med_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="@dimen/dimens_0"
+            android:layout_marginTop="@dimen/dimens_5"
             android:layout_toEndOf="@+id/linearLayout"
             android:orientation="vertical">
 
@@ -58,8 +59,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/med_details"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="@dimen/dimens_10"
+            android:layout_marginStart="@dimen/dimens_0"
+            android:layout_marginTop="@dimen/dimens_2"
             android:layout_marginEnd="@dimen/dimens_20"
             android:layout_toEndOf="@+id/linearLayout">
             <LinearLayout
@@ -95,6 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/dimens_20"
                 android:orientation="horizontal">
 
                 <TextView

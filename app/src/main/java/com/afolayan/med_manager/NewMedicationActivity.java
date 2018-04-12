@@ -22,6 +22,7 @@ import com.afolayan.med_manager.database.model.Medication;
 import com.afolayan.med_manager.database.viewmodel.MedicationViewModel;
 import com.afolayan.med_manager.model.Frequency;
 import com.afolayan.med_manager.services.NotificationService;
+import com.afolayan.med_manager.utils.AccountUtils;
 import com.afolayan.med_manager.utils.Utilities;
 import com.google.gson.Gson;
 import com.leavjenn.smoothdaterangepicker.date.SmoothDateRangePickerFragment;
@@ -152,6 +153,8 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
         medication.setDescription(medicationDesc);
         medication.setFrequency(selectedFrequency.getName());
         medication.setDateCreated(System.currentTimeMillis());
+        String email = AccountUtils.getUserEmail(this);
+        medication.setEmail(email);
 
         //save medication info
         MedicationViewModel viewModel = new MedicationViewModel(this.getApplication());

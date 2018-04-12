@@ -63,6 +63,7 @@ public class MedicationActivity extends AppCompatActivity {
         medicationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         medicationsRecyclerView.setHasFixedSize(true);
         String email = AccountUtils.getUserEmail(this);
+        Log.e(TAG, "onCreate: email-> "+email );
         MedicationViewModel medicationViewModel = new MedicationViewModel(this.getApplication());
         medicationViewModel.fetchAllMedications(email)
                 .observe(this, medications -> {
@@ -110,11 +111,6 @@ public class MedicationActivity extends AppCompatActivity {
             AccountUtils.setUserEmail(this, email);
             String displayName = account.getDisplayName();
             Uri photoUrl = account.getPhotoUrl();
-
-            userViewModel.fetchAllUsers().observe(this, users -> {
-                if(users != null)
-                    Log.e(TAG, "updateUI: usersb -> " + users.size());
-            });
 
             userViewModel.fetchSingleUserByEmail(email, user -> {
                 if(user == null){
