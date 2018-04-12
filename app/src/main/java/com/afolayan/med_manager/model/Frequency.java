@@ -6,9 +6,9 @@ package com.afolayan.med_manager.model;
 
 public class Frequency {
 
-    String name;
-    int count;
-    double quantity;
+    private String name;
+    private int count;
+    private double quantity;
 
     public Frequency() {
     }

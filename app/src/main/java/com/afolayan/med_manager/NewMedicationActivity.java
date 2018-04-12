@@ -1,5 +1,8 @@
 package com.afolayan.med_manager;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +21,9 @@ import com.afolayan.med_manager.adapter.FrequencyListAdapter;
 import com.afolayan.med_manager.database.model.Medication;
 import com.afolayan.med_manager.database.viewmodel.MedicationViewModel;
 import com.afolayan.med_manager.model.Frequency;
+import com.afolayan.med_manager.services.NotificationService;
 import com.afolayan.med_manager.utils.Utilities;
+import com.google.gson.Gson;
 import com.leavjenn.smoothdaterangepicker.date.SmoothDateRangePickerFragment;
 
 import java.text.SimpleDateFormat;
@@ -26,6 +31,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
+import static com.afolayan.med_manager.utils.Utilities.MEDICATION;
 
 public class NewMedicationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -71,6 +80,14 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v->finish());
         toolbar.inflateMenu(R.menu.menu_new_medication);
+        toolbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()){
+                case R.id.action_done:
+                    processDone();
+                    return true;
+            }
+            return false;
+        });
 
         etMedicationName = findViewById(R.id.et_medication_name);
         etMedicationDescription = findViewById(R.id.et_medication_description);
@@ -134,10 +151,30 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
         medication.setName(medicationName);
         medication.setDescription(medicationDesc);
         medication.setFrequency(selectedFrequency.getName());
+        medication.setDateCreated(System.currentTimeMillis());
 
+        //save medication info
         MedicationViewModel viewModel = new MedicationViewModel(this.getApplication());
         viewModel.insertSingleMedication(medication);
 
+        //use frequency value to setup reminders
+        long days = Utilities.getDateDiff(startDate, endDate, TimeUnit.DAYS);
+        Log.e(TAG, "processDone: date diff-> "+days );
+
+        Intent notifierIntent = new Intent(this, NotificationService.class);
+        notifierIntent.putExtra(MEDICATION, new Gson().toJson(medication));
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        PendingIntent alarmPendingIntent = PendingIntent.getService(this, 100,
+                notifierIntent, FLAG_UPDATE_CURRENT);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        if (alarmManager != null) {
+            int intervalMillis = 60 * 60 * selectedFrequency.getCount() * 1000;
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, startDate.getTime(), intervalMillis, alarmPendingIntent);
+        }
+
+        Snackbar.make(findViewById(android.R.id.content), "Reminder Created for "+medicationName, Snackbar.LENGTH_INDEFINITE)
+                .setAction("OK", v -> NewMedicationActivity.this.finish()).show();
     }
 
     @Override
@@ -158,11 +195,11 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
                 (dateRangePickerFragment, yearStart, monthStart, dayStart, yearEnd, monthEnd, dayEnd) -> {
                     // grab the date range, do what you want
                     Calendar calendar = Calendar.getInstance();
-                    calendar.set(yearStart, monthStart, dayStart, 0, 0);
+                    calendar.set(yearStart, monthStart, dayStart, 0, 0); //beginning of the day
                     startDate = calendar.getTime();
 
                     calendar = Calendar.getInstance();
-                    calendar.set(yearEnd, monthEnd, dayEnd, 23, 59);
+                    calendar.set(yearEnd, monthEnd, dayEnd, 23, 59); //end of the day
                     endDate = calendar.getTime();
 
 
@@ -174,6 +211,7 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
                     btnSelectPeriod.setText(String.format("%s - %s", startDateString, endDateString));
                 });
 
+        smoothDateRangePickerFragment.setMinDate(Calendar.getInstance());
         smoothDateRangePickerFragment.show(getFragmentManager(), "smoothDateRangePicker");
 
     }
@@ -182,8 +220,20 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
         List<Frequency> frequencies = new ArrayList<>();
 
         Frequency onceFrequency = new Frequency("Once a day", 1, 0.5);
+        Frequency twiceADay = new Frequency("Twice a day", 2, 0.5);
+        Frequency thriceADay = new Frequency("Three time a day", 3, 0.5);
+        Frequency afterMeal = new Frequency("After each meal", 3, 0.5);
+        Frequency sixHours = new Frequency("Every 6 hours", 4, 0.5);
+        Frequency everyHour = new Frequency("Every 1 hour", 1, 0.5);
+        Frequency everyFiveMins = new Frequency("Every 5 minutes", 5, 0.5);
 
         frequencies.add(onceFrequency);
+        frequencies.add(twiceADay);
+        frequencies.add(thriceADay);
+        frequencies.add(afterMeal);
+        frequencies.add(sixHours);
+        frequencies.add(everyHour);
+        frequencies.add(everyFiveMins);
 
         return frequencies;
     }

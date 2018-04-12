@@ -2,7 +2,6 @@ package com.afolayan.med_manager.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,6 @@ public class FrequencyListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        Log.e(TAG, "getCount: size == "+ frequencyList.size() );
         if(frequencyList != null){
             return frequencyList.size();
         } else {

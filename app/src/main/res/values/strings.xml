@@ -18,6 +18,8 @@
     <string name="name">Name:</string>
     <string name="age">Age</string>
     <string name="user_image">User Image</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
 
     <string-array name="frequency_entries">
 

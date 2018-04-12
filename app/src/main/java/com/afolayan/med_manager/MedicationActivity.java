@@ -5,11 +5,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.afolayan.med_manager.adapter.MedicationListAdapter;
+import com.afolayan.med_manager.database.model.Medication;
 import com.afolayan.med_manager.database.model.User;
 import com.afolayan.med_manager.database.viewmodel.MedicationViewModel;
 import com.afolayan.med_manager.database.viewmodel.UserViewModel;
@@ -55,11 +59,20 @@ public class MedicationActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> startActivity(new Intent(MedicationActivity.this, NewMedicationActivity.class)));
 
+        RecyclerView medicationsRecyclerView = findViewById(R.id.medication_list);
+        medicationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        medicationsRecyclerView.setHasFixedSize(true);
+        String email = AccountUtils.getUserEmail(this);
         MedicationViewModel medicationViewModel = new MedicationViewModel(this.getApplication());
-        medicationViewModel.fetchAllMedications("")
+        medicationViewModel.fetchAllMedications(email)
                 .observe(this, medications -> {
                     if(medications != null) {
                         Log.e(TAG, "onCreate: " + medications.size());
+                        MedicationListAdapter adapter = new MedicationListAdapter(MedicationActivity.this, medications);
+                        medicationsRecyclerView.setAdapter(adapter);
+                        for (Medication mm: medications) {
+                            Log.e(TAG, "onCreate: medication==> " + mm);
+                        }
                     }
                 });
     }
@@ -97,17 +110,13 @@ public class MedicationActivity extends AppCompatActivity {
             AccountUtils.setUserEmail(this, email);
             String displayName = account.getDisplayName();
             Uri photoUrl = account.getPhotoUrl();
-            Log.e(TAG, "updateUI: info-> "+email );
-            Log.e(TAG, "updateUI: info-> "+displayName );
-            Log.e(TAG, "updateUI: info-> "+photoUrl.toString() );
 
             userViewModel.fetchAllUsers().observe(this, users -> {
-                if(users != null) {
+                if(users != null)
                     Log.e(TAG, "updateUI: usersb -> " + users.size());
-                }
             });
 
-            userViewModel.fetchSingleUser(email, user -> {
+            userViewModel.fetchSingleUserByEmail(email, user -> {
                 if(user == null){
                     //user does not exist
                     User newUser = new User();
@@ -116,11 +125,10 @@ public class MedicationActivity extends AppCompatActivity {
                     if(photoUrl != null) {
                         newUser.setPhotoUrl(photoUrl.toString());
                     }
-                    Log.e(TAG, "updateUI: new user-> "+newUser );
+
                     userViewModel.insertUser(newUser);
                 } else {
                     //user exists, update user info
-                    Log.e(TAG, "updateUI: new user-> "+user );
                     if(photoUrl != null) {
                         user.setPhotoUrl(photoUrl.toString());
                     }

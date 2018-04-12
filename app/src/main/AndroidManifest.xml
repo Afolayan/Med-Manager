@@ -4,6 +4,8 @@
     package="com.afolayan.med_manager">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <application
         android:name=".app.MedManager"
@@ -14,18 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/MedManagerAppTheme"
         tools:replace="android:icon">
-        <!--<meta-data
-            android:name="DATABASE"
-            android:value="medication.db" />
-        <meta-data
-            android:name="VERSION"
-            android:value="1" />
-        <meta-data
-            android:name="QUERY_LOG"
-            android:value="true" />
-        <meta-data
-            android:name="DOMAIN_PACKAGE_NAME"
-            android:value="com.afolayan.med_manager" />-->
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -43,16 +33,20 @@
         </activity>
         <activity android:name=".NewMedicationActivity"
             android:label="@string/new_medication"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:theme="@style/MedManagerAppTheme"/>
         <activity
             android:name=".UserProfileActivity"
             android:label="@string/title_activity_user_profile"
             android:parentActivityName=".MedicationActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:theme="@style/MedManagerAppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.afolayan.med_manager.MedicationActivity" />
         </activity>
+
+        <service android:name=".services.NotificationService" />
     </application>
 
 </manifest>
