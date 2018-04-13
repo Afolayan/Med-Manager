@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 public class Medication implements Serializable, Comparable<Medication>{
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private long id;
     private long dateCreated;
     private String name;

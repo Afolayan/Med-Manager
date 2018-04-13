@@ -20,6 +20,7 @@
     <string name="user_image">User Image</string>
     <string name="from">From:</string>
     <string name="to">To:</string>
+    <string name="search_hint">Search Medications</string>
 
     <string-array name="frequency_entries">
 

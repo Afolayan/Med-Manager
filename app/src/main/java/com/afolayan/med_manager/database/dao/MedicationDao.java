@@ -24,7 +24,7 @@ public interface MedicationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMultipleMedications(List<Medication> histories);
 
-    @Query("SELECT * FROM Medication WHERE email=:email")
+    @Query("SELECT * FROM Medication WHERE email=:email ORDER BY dateCreated DESC")
     LiveData<List<Medication>> fetchAllMedications(String email);
 
     @Query("SELECT * FROM Medication WHERE id=:medicationId AND email=:email")
@@ -35,6 +35,9 @@ public interface MedicationDao {
 
     @Update
     void updateRecord(Medication medication);
+
+    @Query("select * from Medication where name LIKE :query")
+    LiveData<List<Medication>> searchMedication(String query);
 
     @Delete
     void deleteRecord(Medication medication);

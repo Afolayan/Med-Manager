@@ -7,17 +7,20 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.afolayan.med_manager.adapter.MedicationListAdapter;
+import com.afolayan.med_manager.adapter.MedicationListSection;
 import com.afolayan.med_manager.database.model.Medication;
 import com.afolayan.med_manager.database.model.User;
 import com.afolayan.med_manager.database.viewmodel.MedicationViewModel;
 import com.afolayan.med_manager.database.viewmodel.UserViewModel;
 import com.afolayan.med_manager.utils.AccountUtils;
+import com.afolayan.med_manager.utils.Utilities;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -25,19 +28,29 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
+
 import static com.afolayan.med_manager.utils.AccountUtils.hasSignedIn;
 
 public class MedicationActivity extends AppCompatActivity {
 
     private static final String TAG = MedicationActivity.class.getSimpleName();
     private static final int RC_SIGN_IN = 1234;
+    private SectionedRecyclerViewAdapter sectionAdapter;
+    private View rootView;
+    private SearchView searchView;
+
     @Override
     public void onStart() {
         super.onStart();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         updateUI(account);
     }
-
+    RecyclerView medicationsRecyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,24 +71,62 @@ public class MedicationActivity extends AppCompatActivity {
         }
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> startActivity(new Intent(MedicationActivity.this, NewMedicationActivity.class)));
+        sectionAdapter = new SectionedRecyclerViewAdapter();
+        medicationsRecyclerView = findViewById(R.id.medication_list);
+        rootView = findViewById(R.id.root_layout);
+        searchView = findViewById(R.id.search_view);
 
-        RecyclerView medicationsRecyclerView = findViewById(R.id.medication_list);
         medicationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         medicationsRecyclerView.setHasFixedSize(true);
         String email = AccountUtils.getUserEmail(this);
-        Log.e(TAG, "onCreate: email-> "+email );
+
         MedicationViewModel medicationViewModel = new MedicationViewModel(this.getApplication());
         medicationViewModel.fetchAllMedications(email)
                 .observe(this, medications -> {
                     if(medications != null) {
-                        Log.e(TAG, "onCreate: " + medications.size());
-                        MedicationListAdapter adapter = new MedicationListAdapter(MedicationActivity.this, medications);
-                        medicationsRecyclerView.setAdapter(adapter);
-                        for (Medication mm: medications) {
-                            Log.e(TAG, "onCreate: medication==> " + mm);
-                        }
+                        displayMedicationsSection(medications);
                     }
                 });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                medicationViewModel.getSearchMedications(query).observe(MedicationActivity.this, medications -> {
+                    displayMedicationsSection(medications);
+                });
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                medicationViewModel.getSearchMedications(newText).observe(MedicationActivity.this, medications -> {
+                    displayMedicationsSection(medications);
+                });
+                return true;
+            }
+        });
+    }
+
+    private void displayMedicationsSection(List<Medication> medications) {
+        //MedicationListAdapter adapter = new MedicationListAdapter(MedicationActivity.this, medications);
+        //medicationsRecyclerView.setAdapter(adapter);
+        sectionAdapter = new SectionedRecyclerViewAdapter();
+        Calendar now = Calendar.getInstance();
+        Calendar lastCal = Calendar.getInstance();
+        int currentYear = now.get(Calendar.YEAR);
+        Medication lastMedication = medications.get(medications.size()-1);
+        lastCal.setTime(new Date(lastMedication.getDateCreated()));
+        int lastYearRecord = lastCal.get(Calendar.YEAR);
+        for(int i = currentYear; i >= lastYearRecord; i--){ //loop from the current year to the last on the list
+            for(int currentMonth = 12; currentMonth >= 1; currentMonth--){ //loop through the months
+                List<Medication> medicationsInAMonth = Utilities.medicationsInAMonth(medications, currentYear, currentMonth);
+//                Log.e(TAG, "displayMedicationsSection: year: "+currentYear+" and month "+currentMonth +" has list size "+medicationsInAMonth.size() );
+                if(medicationsInAMonth.size() > 0){
+                    sectionAdapter.addSection(new MedicationListSection(medicationsInAMonth));
+                }
+            }
+        }
+        medicationsRecyclerView.setAdapter(sectionAdapter);
+
     }
 
     @Override
@@ -89,6 +140,13 @@ public class MedicationActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        searchView.setQuery("", false);
+        rootView.requestFocus();
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {

@@ -3,8 +3,12 @@ package com.afolayan.med_manager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -36,10 +40,12 @@ import java.util.concurrent.TimeUnit;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static com.afolayan.med_manager.utils.Utilities.MEDICATION;
+import static com.afolayan.med_manager.utils.Utilities.addReminder;
 
 public class NewMedicationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = NewMedicationActivity.class.getSimpleName();
+    private static final int REQUEST_READ_CALENDAR = 90;
     Toolbar toolbar;
 
     /*
@@ -56,12 +62,12 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
 
     Date startDate, endDate;
 
+    Medication mMedication;
+
     AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            Log.e(TAG, "onItemSelected: item selected at position "+position);
             Frequency frequency = loadFrequencyTypes().get(position);
-            Log.e(TAG, "onItemSelected: frequency at position = "+ frequency);
             frequencySpinner.setTag(frequency);
         }
 
@@ -152,9 +158,13 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
         medication.setName(medicationName);
         medication.setDescription(medicationDesc);
         medication.setFrequency(selectedFrequency.getName());
+        medication.setFrequencyCount(selectedFrequency.getCount());
         medication.setDateCreated(System.currentTimeMillis());
         String email = AccountUtils.getUserEmail(this);
         medication.setEmail(email);
+
+
+        mMedication = medication;
 
         //save medication info
         MedicationViewModel viewModel = new MedicationViewModel(this.getApplication());
@@ -175,6 +185,36 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
             int intervalMillis = 60 * 60 * selectedFrequency.getCount() * 1000;
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, startDate.getTime(), intervalMillis, alarmPendingIntent);
         }
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED
+            || ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.READ_CALENDAR) || ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.WRITE_CALENDAR)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.READ_CALENDAR, android.Manifest.permission.WRITE_CALENDAR},
+                        REQUEST_READ_CALENDAR);
+
+                // REQUEST_READ_CALENDAR is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            // Permission has already been granted
+            addReminder(this, medication);
+        }
 
         Snackbar.make(findViewById(android.R.id.content), "Reminder Created for "+medicationName, Snackbar.LENGTH_INDEFINITE)
                 .setAction("OK", v -> NewMedicationActivity.this.finish()).show();
@@ -189,6 +229,36 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
             case R.id.btn_select_period:
                 openDateRangePicker();
                 break;
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_READ_CALENDAR: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    if(mMedication != null) {
+                        addReminder(this, mMedication);
+                    }
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{android.Manifest.permission.READ_CALENDAR, android.Manifest.permission.WRITE_CALENDAR},
+                            REQUEST_READ_CALENDAR);
+                }
+                break;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
         }
     }
 

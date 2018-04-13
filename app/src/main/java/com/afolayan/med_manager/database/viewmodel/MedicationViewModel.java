@@ -6,8 +6,8 @@ import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-import com.afolayan.med_manager.database.interfaces.DeleteMedicationListener;
 import com.afolayan.med_manager.database.MedManagerDatabase;
+import com.afolayan.med_manager.database.interfaces.DeleteMedicationListener;
 import com.afolayan.med_manager.database.interfaces.SingleMedicationListener;
 import com.afolayan.med_manager.database.model.Medication;
 
@@ -55,6 +55,9 @@ public class MedicationViewModel extends AndroidViewModel {
         new DeleteUserMedication(managerDatabase, listener, userEmail).execute();
     }
 
+    public LiveData<List<Medication>> getSearchMedications(String query) {
+        return managerDatabase.medicationDao().searchMedication("%"+query+"%");
+    }
     private static class InsertSingleMedication extends AsyncTask<Void, Void, Void>{
         MedManagerDatabase medicationDb;
         Medication medication;

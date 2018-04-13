@@ -58,10 +58,7 @@ public class UserProfileFragment extends Fragment implements UserProfileActivity
                 if(!TextUtils.isEmpty(allergies)){
                     etAllergies.setText(allergies);
                 }
-                if(age != 0){
-                    etAge.setText(String.valueOf(age));
-                }
-
+                etAge.setText(String.valueOf(age));
             }
         });
         return view;
