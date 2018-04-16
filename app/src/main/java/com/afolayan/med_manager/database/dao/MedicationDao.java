@@ -27,6 +27,9 @@ public interface MedicationDao {
     @Query("SELECT * FROM Medication WHERE email=:email ORDER BY dateCreated DESC")
     LiveData<List<Medication>> fetchAllMedications(String email);
 
+    @Query("SELECT * FROM Medication ORDER BY dateCreated DESC")
+    List<Medication> fetchAllMedicationsList();
+
     @Query("SELECT * FROM Medication WHERE id=:medicationId AND email=:email")
     Medication getSingleMedication(String medicationId, String email);
 

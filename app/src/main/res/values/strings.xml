@@ -9,7 +9,7 @@
     <string name="new_medication">Create New Medication</string>
     <string name="frequency">Frequency</string>
     <string name="frequency_type">Frequency Type</string>
-    <string name="preferred_time">Preferred Time</string>
+    <string name="preferred_time">Preferred Time Per Day</string>
     <string name="choose_time">Choose Time…</string>
     <string name="select_period">Select Period</string>
     <!--<string name="web_client_id">633481090758-n5qko56vi2po5fu3tbulraqd9b47j98q.apps.googleusercontent.com</string>-->
@@ -21,6 +21,7 @@
     <string name="from">From:</string>
     <string name="to">To:</string>
     <string name="search_hint">Search Medications</string>
+    <string name="no_medication_at_this_time">No Medication at this time</string>
 
     <string-array name="frequency_entries">
 

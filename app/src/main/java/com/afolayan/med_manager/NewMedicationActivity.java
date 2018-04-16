@@ -25,7 +25,7 @@ import com.afolayan.med_manager.adapter.FrequencyListAdapter;
 import com.afolayan.med_manager.database.model.Medication;
 import com.afolayan.med_manager.database.viewmodel.MedicationViewModel;
 import com.afolayan.med_manager.model.Frequency;
-import com.afolayan.med_manager.services.NotificationService;
+import com.afolayan.med_manager.receivers.AlarmReceiver;
 import com.afolayan.med_manager.utils.AccountUtils;
 import com.afolayan.med_manager.utils.Utilities;
 import com.google.gson.Gson;
@@ -42,24 +42,17 @@ import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static com.afolayan.med_manager.utils.Utilities.MEDICATION;
 import static com.afolayan.med_manager.utils.Utilities.addReminder;
 
-public class NewMedicationActivity extends AppCompatActivity implements View.OnClickListener {
+public class NewMedicationActivity extends AppCompatActivity implements View.OnClickListener, TimePickerDialogFragment.OnTimeSet {
 
     private static final String TAG = NewMedicationActivity.class.getSimpleName();
     private static final int REQUEST_READ_CALENDAR = 90;
     Toolbar toolbar;
 
-    /*
-    et_medication_name
-            et_medication_description
-            spinner_frequency
-            btn_select_period
-            btn_choose_time
-     */
     EditText etMedicationName, etMedicationDescription;
     Spinner frequencySpinner;
     Button btnSelectPeriod, btnChooseTime;
-    String selectedFrequency;
 
+    int selectedHour = 0, selectedMin = 0;
     Date startDate, endDate;
 
     Medication mMedication;
@@ -152,6 +145,16 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
             return;
         }
 
+        if(selectedHour == 0 && selectedMin == 0){
+            Snackbar.make(view, "Select the time to start this medication", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+        Calendar startCalendar = Calendar.getInstance();
+        startCalendar.setTime(startDate);
+        startCalendar.set(Calendar.HOUR_OF_DAY, selectedHour);
+        startCalendar.set(Calendar.MINUTE, selectedMin);
+        startDate = startCalendar.getTime();
+
         Medication medication = new Medication();
         medication.setDateFrom(startDate.getTime());
         medication.setDateTo(endDate.getTime());
@@ -167,14 +170,14 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
         mMedication = medication;
 
         //save medication info
-        MedicationViewModel viewModel = new MedicationViewModel(this.getApplication());
+        MedicationViewModel viewModel = new MedicationViewModel(this);
         viewModel.insertSingleMedication(medication);
 
         //use frequency value to setup reminders
         long days = Utilities.getDateDiff(startDate, endDate, TimeUnit.DAYS);
         Log.e(TAG, "processDone: date diff-> "+days );
 
-        Intent notifierIntent = new Intent(this, NotificationService.class);
+        Intent notifierIntent = new Intent(this, AlarmReceiver.class);
         notifierIntent.putExtra(MEDICATION, new Gson().toJson(medication));
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         PendingIntent alarmPendingIntent = PendingIntent.getService(this, 100,
@@ -224,12 +227,18 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_choose_time:
-
+                openTimePicker();
                 break;
             case R.id.btn_select_period:
                 openDateRangePicker();
                 break;
         }
+    }
+
+    private void openTimePicker() {
+        TimePickerDialogFragment newFragment = new TimePickerDialogFragment();
+        newFragment.setOnTimeSetListener(this);
+        newFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
 
@@ -268,7 +277,7 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
                 (dateRangePickerFragment, yearStart, monthStart, dayStart, yearEnd, monthEnd, dayEnd) -> {
                     // grab the date range, do what you want
                     Calendar calendar = Calendar.getInstance();
-                    calendar.set(yearStart, monthStart, dayStart, 0, 0); //beginning of the day
+                    calendar.set(yearStart, monthStart, dayStart);
                     startDate = calendar.getTime();
 
                     calendar = Calendar.getInstance();
@@ -309,5 +318,16 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
         frequencies.add(everyFiveMins);
 
         return frequencies;
+    }
+
+    @Override
+    public void onTimeSet(int hourOfDay, int minute) {
+        this.selectedHour = hourOfDay;
+        this.selectedMin = minute;
+        Calendar timeCalendar = Calendar.getInstance();
+        timeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        timeCalendar.set(Calendar.MINUTE, minute);
+        String timee = Utilities.TIME_ONLY_FORMAT.format(timeCalendar.getTime());
+        btnChooseTime.setText(timee);
     }
 }

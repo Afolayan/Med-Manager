@@ -3,6 +3,7 @@ package com.afolayan.med_manager.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afolayan.med_manager.R;
@@ -23,6 +24,7 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 public class MedicationListSection extends StatelessSection {
 
     private List<Medication> medicationList;
+    private View.OnClickListener deleteImageClickListener;
 
     public MedicationListSection(List<Medication> medications) {
         super(SectionParameters.builder()
@@ -31,6 +33,10 @@ public class MedicationListSection extends StatelessSection {
                 .build());
 
         this.medicationList = medications;
+    }
+
+    public void setDeleteImageClickListener(View.OnClickListener deleteImageClickListener) {
+        this.deleteImageClickListener = deleteImageClickListener;
     }
 
     @Override
@@ -72,6 +78,10 @@ public class MedicationListSection extends StatelessSection {
             if (!TextUtils.isEmpty(dateEndString)) {
                 itemHolder.tvMedEnd.setText(dateEndString);
             }
+            if(deleteImageClickListener != null) {
+                itemHolder.ivDelete.setTag(medication);
+                itemHolder.ivDelete.setOnClickListener(deleteImageClickListener);
+            }
         }
     }
 
@@ -100,11 +110,13 @@ public class MedicationListSection extends StatelessSection {
     }
     public class ItemViewHolder extends RecyclerView.ViewHolder{
         TextView tvMedName, tvMedStart, tvMedEnd;
+        ImageView ivDelete;
         ItemViewHolder(View itemView) {
             super(itemView);
             tvMedName = itemView.findViewById(R.id.tv_med_name);
             tvMedStart = itemView.findViewById(R.id.tv_date_start);
             tvMedEnd = itemView.findViewById(R.id.tv_date_end);
+            ivDelete = itemView.findViewById(R.id.img_delete);
         }
     }
 }

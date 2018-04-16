@@ -43,6 +43,8 @@ public class MedicationActivity extends AppCompatActivity {
     private SectionedRecyclerViewAdapter sectionAdapter;
     private View rootView;
     private SearchView searchView;
+    MedicationViewModel medicationViewModel;
+    String email;
 
     @Override
     public void onStart() {
@@ -78,13 +80,15 @@ public class MedicationActivity extends AppCompatActivity {
 
         medicationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         medicationsRecyclerView.setHasFixedSize(true);
-        String email = AccountUtils.getUserEmail(this);
+        email = AccountUtils.getUserEmail(this);
 
-        MedicationViewModel medicationViewModel = new MedicationViewModel(this.getApplication());
+        medicationViewModel = new MedicationViewModel(this);
         medicationViewModel.fetchAllMedications(email)
                 .observe(this, medications -> {
                     if(medications != null) {
-                        displayMedicationsSection(medications);
+                        if(medications.size() > 0) {
+                            displayMedicationsSection(medications);
+                        }
                     }
                 });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -113,19 +117,31 @@ public class MedicationActivity extends AppCompatActivity {
         Calendar now = Calendar.getInstance();
         Calendar lastCal = Calendar.getInstance();
         int currentYear = now.get(Calendar.YEAR);
-        Medication lastMedication = medications.get(medications.size()-1);
-        lastCal.setTime(new Date(lastMedication.getDateCreated()));
-        int lastYearRecord = lastCal.get(Calendar.YEAR);
-        for(int i = currentYear; i >= lastYearRecord; i--){ //loop from the current year to the last on the list
-            for(int currentMonth = 12; currentMonth >= 1; currentMonth--){ //loop through the months
-                List<Medication> medicationsInAMonth = Utilities.medicationsInAMonth(medications, currentYear, currentMonth);
-//                Log.e(TAG, "displayMedicationsSection: year: "+currentYear+" and month "+currentMonth +" has list size "+medicationsInAMonth.size() );
-                if(medicationsInAMonth.size() > 0){
-                    sectionAdapter.addSection(new MedicationListSection(medicationsInAMonth));
+        if(medications.size() > 0) {
+            Medication lastMedication = medications.get(medications.size() - 1);
+            lastCal.setTime(new Date(lastMedication.getDateCreated()));
+            int lastYearRecord = lastCal.get(Calendar.YEAR);
+            for (int i = currentYear; i >= lastYearRecord; i--) { //loop from the current year to the last on the list
+                for (int currentMonth = 12; currentMonth >= 1; currentMonth--) { //loop through the months
+                    List<Medication> medicationsInAMonth = Utilities.medicationsInAMonth(medications, currentYear, currentMonth);
+                    if (medicationsInAMonth.size() > 0) {
+                        MedicationListSection listSection = new MedicationListSection(medicationsInAMonth);
+                        listSection.setDeleteImageClickListener(v -> {
+                            Medication vTag = (Medication) v.getTag();
+                            medicationViewModel.deleteSingleMedication(vTag);
+                            sectionAdapter.notifyDataSetChanged();
+                        });
+                        sectionAdapter.addSection(listSection);
+                    }
                 }
             }
+            findViewById(R.id.tv_no_medication).setVisibility(View.GONE);
+            medicationsRecyclerView.setAdapter(sectionAdapter);
+            medicationsRecyclerView.setVisibility(View.VISIBLE);
+        }else {
+            findViewById(R.id.tv_no_medication).setVisibility(View.VISIBLE);
+            medicationsRecyclerView.setVisibility(View.GONE);
         }
-        medicationsRecyclerView.setAdapter(sectionAdapter);
 
     }
 

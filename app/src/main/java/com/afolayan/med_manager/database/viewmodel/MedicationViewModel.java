@@ -1,6 +1,6 @@
 package com.afolayan.med_manager.database.viewmodel;
 
-import android.app.Application;
+import android.app.Activity;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
@@ -22,9 +22,9 @@ public class MedicationViewModel extends AndroidViewModel {
     private LiveData<List<Medication>> medicationList;
     int count = 0;
 
-    public MedicationViewModel(@NonNull Application application) {
-        super(application);
-        managerDatabase = MedManagerDatabase.getDatabase(application);
+    public MedicationViewModel(@NonNull Activity activity) {
+        super(activity.getApplication());
+        managerDatabase = MedManagerDatabase.getDatabase(activity.getApplication());
     }
 
     public LiveData<List<Medication>> fetchAllMedications(String email){
