@@ -22,6 +22,8 @@
     <string name="to">To:</string>
     <string name="search_hint">Search Medications</string>
     <string name="no_medication_at_this_time">No Medication at this time</string>
+    <string name="medication_name_input">Medication Name Input</string>
+    <string name="medication_description_input">Medication Description Input</string>
 
     <string-array name="frequency_entries">
 

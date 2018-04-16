@@ -37,6 +37,7 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
                 android:textSize="15sp"
+                android:contentDescription="@string/medication_name_input"
                 android:theme="@style/EditTextTheme" />
 
         </android.support.design.widget.TextInputLayout>
