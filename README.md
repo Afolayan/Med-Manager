@@ -1,7 +1,5 @@
 # Med-Manager
 
-# Med-Manager
-
 This is an intermediate Android app project for the Andela-Udacity ALC Program
 # Features
 #
