@@ -21,24 +21,11 @@ jobs:
       # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
       TERM: dumb
-      CC_TEST_REPORTER_ID: 72207016b2b04ecb70107bd699ee560da73476441084a2e59e41e03194c5f39c
 
 
 
     steps:
       - checkout
-
-    # Code Climate
-    dependencies:
-      post:
-        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-        - chmod +x ./cc-test-reporter
-
-    test:
-      pre:
-        - ./cc-test-reporter before-build
-
-
 
       # Download and cache dependencies
       - restore_cache:
@@ -55,16 +42,6 @@ jobs:
           name: Download Dependencies
           command: ./gradlew androidDependencies
 
-      - run:
-          name: Setup dependencies
-          command: |
-            sudo composer self-update
-            composer install -n --prefer-dist
-      - run:
-          name: Setup Code Climate test-reporter
-          command: |
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
 
       - save_cache:
           paths:
