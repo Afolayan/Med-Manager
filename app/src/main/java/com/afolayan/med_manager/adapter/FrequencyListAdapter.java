@@ -73,16 +73,6 @@ public class FrequencyListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return super.getItemViewType(position);
-    }
-
-    @Override
-    public int getViewTypeCount() {
-        return super.getViewTypeCount();
-    }
-
     private static class SpinnerViewHolder{
         TextView tvLocationName;
     }

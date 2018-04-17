@@ -20,7 +20,7 @@ public abstract class MedManagerDatabase extends RoomDatabase {
     public static MedManagerDatabase getDatabase(Context context) {
         if(INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), MedManagerDatabase.class,
-                    "biocloud_db").build();
+                    "medmanager_db").build();
         }
         return INSTANCE;
     }

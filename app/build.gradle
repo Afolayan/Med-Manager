@@ -59,6 +59,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     testImplementation 'junit:junit:4.12'
 
+    //evernote alarm helper
+    implementation 'com.evernote:android-job:1.2.5'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

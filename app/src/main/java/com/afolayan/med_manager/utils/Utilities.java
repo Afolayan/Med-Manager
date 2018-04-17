@@ -60,11 +60,11 @@ public class Utilities {
         }while (startMillis <= endMillis);
     }
 
-    private static void addSingleReminder(Context context, String notifHeader, String description, long startTime, long endTime){
+    private static void addSingleReminder(Context context, String notificationHeader, String description, long startTime, long endTime){
         String eventUriString = "content://com.android.calendar/events";
         ContentValues eventValues = new ContentValues();
         eventValues.put(CalendarContract.Events.CALENDAR_ID, 1);
-        eventValues.put(CalendarContract.Events.TITLE, notifHeader);
+        eventValues.put(CalendarContract.Events.TITLE, notificationHeader);
         eventValues.put(CalendarContract.Events.DESCRIPTION, description);
         String regionLocale = Locale.getDefault().toString();
         eventValues.put(CalendarContract.Events.EVENT_TIMEZONE, regionLocale);

@@ -1,7 +1,9 @@
 package com.afolayan.med_manager.app;
 
 import android.app.Application;
-import android.content.res.Configuration;
+
+import com.afolayan.med_manager.job.NotificationJobCreator;
+import com.evernote.android.job.JobManager;
 
 /**
  * Created by Oluwaseyi AFOLAYAN on 4/4/2018.
@@ -16,21 +18,7 @@ public class MedManager extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        JobManager.create(this).addJobCreator(new NotificationJobCreator());
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-    }
-
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-    }
 }

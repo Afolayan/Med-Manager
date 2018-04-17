@@ -11,10 +11,12 @@ import android.widget.EditText;
 import com.afolayan.med_manager.database.viewmodel.UserViewModel;
 import com.afolayan.med_manager.utils.AccountUtils;
 
+import java.util.Objects;
+
 public class UserProfileActivity extends AppCompatActivity {
 
-    OnFabInteraction fabInteraction;
-    FloatingActionButton fab;
+    private OnFabInteraction fabInteraction;
+    private FloatingActionButton fab;
 
 
     public void setFabInteraction(OnFabInteraction fabInteraction) {
@@ -25,12 +27,12 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> makeEditable());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
     private void makeEditable() {

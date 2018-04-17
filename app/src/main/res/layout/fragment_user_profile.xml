@@ -22,20 +22,13 @@
             app:srcCompat="@drawable/ic_account_circle"
             android:layout_gravity="center_horizontal"
             android:contentDescription="@string/user_image"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:visibility="gone"
-            android:labelFor="@id/et_user_name"/>
         <android.support.design.widget.TextInputLayout
             android:id="@+id/user_name_Layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dimens_10"
             android:textColorHint="@color/colorPrimary"
-            android:hint="Name"
+            android:hint="@string/name"
             app:hintEnabled="true">
             <EditText
                 android:id="@+id/et_user_name"
@@ -51,17 +44,18 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/colorPrimary"
                 android:textSize="15sp"
+                android:hint="@string/name"
                 android:theme="@style/EditTextTheme" />
 
         </android.support.design.widget.TextInputLayout>
 
-        <TextView
+        <!--<TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:visibility="gone"
-            android:labelFor="@id/et_user_age"/>
+            android:labelFor="@id/et_user_age"/>-->
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/user_age_Layout"
@@ -84,6 +78,7 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/colorPrimary"
                 android:textSize="15sp"
+                android:hint="@string/age"
                 android:theme="@style/EditTextTheme" />
 
         </android.support.design.widget.TextInputLayout>
@@ -92,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColorHint="@color/colorPrimary"
-            android:hint="Allergies"
+            android:hint="@string/allergies"
             android:layout_margin="@dimen/dimens_10"
             app:hintEnabled="true">
             <EditText
@@ -107,8 +102,9 @@
                 android:inputType="textMultiLine"
                 android:enabled="false"
                 android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimary"
+                android:textColorHint="@color/white"
                 android:textSize="15sp"
+                android:hint="@string/allergies"
                 android:theme="@style/EditTextTheme" />
 
         </android.support.design.widget.TextInputLayout>

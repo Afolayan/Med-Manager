@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/white_radius_button"
+        android:orientation="vertical"
+        android:padding="25dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="@string/text_details"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+
+        <include
+            android:id="@+id/med_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/layout_detail_single_item"/>
+
+        <include
+            android:id="@+id/med_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/layout_detail_single_item"/>
+
+        <include
+            android:id="@+id/med_start_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/layout_detail_single_item"/>
+
+        <include
+            android:id="@+id/med_start_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/layout_detail_single_item"/>
+
+        <include
+            android:id="@+id/med_end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/layout_detail_single_item"/>
+
+        <include
+            android:id="@+id/med_frequency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/layout_detail_single_item"/>
+
+        <Button
+            android:id="@+id/dismiss_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@color/transparent"
+            android:text="@string/ok"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>
+
+
+

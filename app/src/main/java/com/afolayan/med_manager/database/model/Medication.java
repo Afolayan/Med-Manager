@@ -117,9 +117,8 @@ public class Medication implements Serializable, Comparable<Medication>{
 
     @Override
     public boolean equals(Object obj) {
-        Medication medication = (Medication)obj;
-        return name.toLowerCase().trim()
-                .equals(medication.getName().toLowerCase().trim());
+        Medication medication = (Medication) obj;
+        return medication != null && name.toLowerCase().trim().equals(medication.getName().toLowerCase().trim());
     }
 
     public boolean contains(Medication medication){

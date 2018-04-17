@@ -17,8 +17,8 @@ import java.util.Calendar;
 
 public class TimePickerDialogFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
-    public static final String TAG = TimePickerDialogFragment.class.getSimpleName();
-    OnTimeSet onTimeSetListener;
+    private static final String TAG = TimePickerDialogFragment.class.getSimpleName();
+    private OnTimeSet onTimeSetListener;
 
     public void setOnTimeSetListener(OnTimeSet onTimeSetListener) {
         this.onTimeSetListener = onTimeSetListener;

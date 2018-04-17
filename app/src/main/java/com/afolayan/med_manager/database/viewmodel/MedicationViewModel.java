@@ -130,7 +130,7 @@ public class MedicationViewModel extends AndroidViewModel {
         MedManagerDatabase medicationDb;
         Medication medication;
 
-        public DeleteSingleMedication(MedManagerDatabase medicationDb, Medication medication) {
+        DeleteSingleMedication(MedManagerDatabase medicationDb, Medication medication) {
             this.medicationDb = medicationDb;
             this.medication = medication;
         }
@@ -146,7 +146,7 @@ public class MedicationViewModel extends AndroidViewModel {
         String userEmail;
         DeleteMedicationListener listener;
 
-        public DeleteUserMedication(MedManagerDatabase medicationDb, DeleteMedicationListener listener, String userEmail) {
+        DeleteUserMedication(MedManagerDatabase medicationDb, DeleteMedicationListener listener, String userEmail) {
             this.medicationDb = medicationDb;
             this.userEmail = userEmail;
             this.listener = listener;

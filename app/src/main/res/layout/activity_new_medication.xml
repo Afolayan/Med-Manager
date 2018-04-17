@@ -20,7 +20,6 @@
             android:id="@+id/medication_name_Layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorPrimary"
             android:textColorHint="@color/colorPrimary"
             android:hint="@string/medication_name"
             app:hintEnabled="true">
@@ -35,9 +34,9 @@
                 android:padding="@dimen/dimens_10"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
-                android:textColorHint="@color/black"
+                android:textColorHint="@color/light_gray"
                 android:textSize="15sp"
-                android:contentDescription="@string/medication_name_input"
+                android:inputType="text"
                 android:theme="@style/EditTextTheme" />
 
         </android.support.design.widget.TextInputLayout>
@@ -64,8 +63,9 @@
                 android:gravity="start"
                 android:lines="5"
                 android:textColor="@color/black"
-                android:textColorHint="@color/black"
+                android:textColorHint="@color/light_gray"
                 android:textSize="15sp"
+                android:inputType="textMultiLine"
                 android:theme="@style/EditTextTheme" />
 
         </android.support.design.widget.TextInputLayout>

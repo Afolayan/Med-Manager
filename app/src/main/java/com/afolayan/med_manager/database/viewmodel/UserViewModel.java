@@ -49,7 +49,7 @@ public class UserViewModel {
         MedManagerDatabase medManagerDatabase;
         User user;
 
-        public InsertSingleUser(MedManagerDatabase medManagerDatabase, User user) {
+        InsertSingleUser(MedManagerDatabase medManagerDatabase, User user) {
             this.medManagerDatabase = medManagerDatabase;
             this.user = user;
         }
@@ -65,7 +65,7 @@ public class UserViewModel {
         MedManagerDatabase medManagerDatabase;
         SingleUserListener singleUserListener;
 
-        public FetchSingleUser(MedManagerDatabase medManagerDatabase, SingleUserListener listener) {
+        FetchSingleUser(MedManagerDatabase medManagerDatabase, SingleUserListener listener) {
             this.medManagerDatabase = medManagerDatabase;
             singleUserListener = listener;
         }
@@ -108,7 +108,7 @@ public class UserViewModel {
         MedManagerDatabase medManagerDatabase;
         User user;
 
-        public UpdateSingleUser(MedManagerDatabase medManagerDatabase, User user) {
+        UpdateSingleUser(MedManagerDatabase medManagerDatabase, User user) {
             this.medManagerDatabase = medManagerDatabase;
             this.user = user;
         }
@@ -124,7 +124,7 @@ public class UserViewModel {
         MedManagerDatabase medManagerDatabase;
         User user;
 
-        public DeleteSingleUser(MedManagerDatabase medManagerDatabase, User user) {
+        DeleteSingleUser(MedManagerDatabase medManagerDatabase, User user) {
             this.medManagerDatabase = medManagerDatabase;
             this.user = user;
         }

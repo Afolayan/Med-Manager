@@ -25,16 +25,13 @@ public class MedicationListAdapter extends RecyclerView.Adapter<MedicationListAd
     private List<Medication> medications;
     public static final String TAG = MedicationListAdapter.class.getSimpleName();
 
-    public MedicationListAdapter(Activity activity, List<Medication> medications) {
+    MedicationListAdapter(Activity activity, List<Medication> medications) {
         super();
         this.activity = activity;
         this.medications = medications;
     }
 
-    private View.OnClickListener historyItemClickListener = view -> {
-
-    };
-
+    @NonNull
     @Override
     public MedicationsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View mainView = LayoutInflater.from(activity).inflate(R.layout.layout_item_single_medication, parent, false);
@@ -42,7 +39,7 @@ public class MedicationListAdapter extends RecyclerView.Adapter<MedicationListAd
     }
 
     @Override
-    public void onBindViewHolder(MedicationsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MedicationsViewHolder holder, int position) {
         Medication medication = medications.get(position);
         SimpleDateFormat dateFormat = Utilities.DATE_FORMAT;
 
@@ -55,7 +52,6 @@ public class MedicationListAdapter extends RecyclerView.Adapter<MedicationListAd
 
             String medName = medication.getName();
 
-            //holder.itemView.setOnClickListener(historyItemClickListener);
             holder.itemView.setTag(medication);
 
             if(!TextUtils.isEmpty(medName)) {
@@ -76,7 +72,7 @@ public class MedicationListAdapter extends RecyclerView.Adapter<MedicationListAd
         return medications.size();
     }
 
-    public class MedicationsViewHolder extends RecyclerView.ViewHolder{
+    class MedicationsViewHolder extends RecyclerView.ViewHolder{
         TextView tvMedName, tvMedStart, tvMedEnd;
         MedicationsViewHolder(View itemView) {
             super(itemView);

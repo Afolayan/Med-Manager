@@ -1,14 +1,20 @@
 package com.afolayan.med_manager.adapter;
 
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afolayan.med_manager.MedicationActivity;
+import com.afolayan.med_manager.MedicationDetailsDialogFragment;
 import com.afolayan.med_manager.R;
 import com.afolayan.med_manager.database.model.Medication;
 import com.afolayan.med_manager.utils.Utilities;
+import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,6 +22,8 @@ import java.util.List;
 
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
+
+import static com.afolayan.med_manager.utils.Utilities.MEDICATION;
 
 /**
  * Created by Oluwaseyi AFOLAYAN on 4/13/2018.
@@ -25,13 +33,15 @@ public class MedicationListSection extends StatelessSection {
 
     private List<Medication> medicationList;
     private View.OnClickListener deleteImageClickListener;
+    private MedicationActivity activity;
 
-    public MedicationListSection(List<Medication> medications) {
+    public MedicationListSection(MedicationActivity activity, List<Medication> medications) {
         super(SectionParameters.builder()
                 .itemResourceId(R.layout.layout_item_single_medication)
                 .headerResourceId(R.layout.list_section_header)
                 .build());
 
+        this.activity = activity;
         this.medicationList = medications;
     }
 
@@ -39,6 +49,17 @@ public class MedicationListSection extends StatelessSection {
         this.deleteImageClickListener = deleteImageClickListener;
     }
 
+    private View.OnClickListener medicationItemClickListener = view -> {
+        MedicationDetailsDialogFragment dialogFragment = new MedicationDetailsDialogFragment();
+        FragmentManager manager = activity.getSupportFragmentManager();
+        Medication selectedMed = (Medication) view.getTag();
+        Bundle bundle = new Bundle();
+        bundle.putString(MEDICATION, new Gson().toJson(selectedMed));
+        dialogFragment.setArguments(bundle);
+        dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Dialog_Medication_Details);
+        dialogFragment.show(manager, "details");
+
+    };
     @Override
     public int getContentItemsTotal() {
         return medicationList.size();
@@ -82,6 +103,7 @@ public class MedicationListSection extends StatelessSection {
                 itemHolder.ivDelete.setTag(medication);
                 itemHolder.ivDelete.setOnClickListener(deleteImageClickListener);
             }
+            itemHolder.itemView.setOnClickListener(medicationItemClickListener);
         }
     }
 
@@ -108,7 +130,7 @@ public class MedicationListSection extends StatelessSection {
             tvTitle = view.findViewById(R.id.tvTitle);
         }
     }
-    public class ItemViewHolder extends RecyclerView.ViewHolder{
+    class ItemViewHolder extends RecyclerView.ViewHolder{
         TextView tvMedName, tvMedStart, tvMedEnd;
         ImageView ivDelete;
         ItemViewHolder(View itemView) {

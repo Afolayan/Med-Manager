@@ -19,8 +19,6 @@ import com.squareup.picasso.Picasso;
 
 public class UserProfileFragment extends Fragment implements UserProfileActivity.OnFabInteraction{
 
-    UserProfileActivity.OnFabInteraction fabListener;
-
     public UserProfileFragment() {
     }
 
@@ -35,9 +33,8 @@ public class UserProfileFragment extends Fragment implements UserProfileActivity
 
 
         if (getActivity() != null) {
-            ((UserProfileActivity)getActivity()).setFabInteraction(() -> {
-                Log.e("UPA", "onFabClicked: listener received" );
-            });
+            ((UserProfileActivity)getActivity()).setFabInteraction(() ->
+                    Log.e("UPA", "onFabClicked: listener received" ));
         }
         UserViewModel viewModel = new UserViewModel(getActivity());
         String userEmail = AccountUtils.getUserEmail(getActivity());
@@ -73,9 +70,7 @@ public class UserProfileFragment extends Fragment implements UserProfileActivity
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(context instanceof UserProfileActivity.OnFabInteraction){
-            fabListener = (UserProfileActivity.OnFabInteraction) context;
-        }
+
     }
 
     @Override

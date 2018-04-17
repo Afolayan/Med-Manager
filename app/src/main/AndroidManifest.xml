@@ -24,7 +24,7 @@
 
         <activity
             android:name=".MedicationActivity"
-            android:label="@string/title_activity_medication"
+            android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:theme="@style/MedManagerAppTheme">
             <intent-filter>
@@ -48,14 +48,6 @@
                 android:value="com.afolayan.med_manager.MedicationActivity" />
         </activity>
 
-        <service android:name=".services.NotificationService" />
-        <receiver android:name=".receivers.AlarmReceiver"/>
-
-        <receiver android:name=".receivers.BootCompletedReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

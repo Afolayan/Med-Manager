@@ -43,8 +43,7 @@ public class MedicationActivity extends AppCompatActivity {
     private SectionedRecyclerViewAdapter sectionAdapter;
     private View rootView;
     private SearchView searchView;
-    MedicationViewModel medicationViewModel;
-    String email;
+    private MedicationViewModel medicationViewModel;
 
     @Override
     public void onStart() {
@@ -52,7 +51,7 @@ public class MedicationActivity extends AppCompatActivity {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         updateUI(account);
     }
-    RecyclerView medicationsRecyclerView;
+    private RecyclerView medicationsRecyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +79,7 @@ public class MedicationActivity extends AppCompatActivity {
 
         medicationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         medicationsRecyclerView.setHasFixedSize(true);
-        email = AccountUtils.getUserEmail(this);
+        String email = AccountUtils.getUserEmail(this);
 
         medicationViewModel = new MedicationViewModel(this);
         medicationViewModel.fetchAllMedications(email)
@@ -94,17 +93,15 @@ public class MedicationActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                medicationViewModel.getSearchMedications(query).observe(MedicationActivity.this, medications -> {
-                    displayMedicationsSection(medications);
-                });
+                medicationViewModel.getSearchMedications(query).observe(MedicationActivity.this, medications ->
+                        displayMedicationsSection(medications));
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                medicationViewModel.getSearchMedications(newText).observe(MedicationActivity.this, medications -> {
-                    displayMedicationsSection(medications);
-                });
+                medicationViewModel.getSearchMedications(newText).observe(MedicationActivity.this, medications ->
+                        displayMedicationsSection(medications));
                 return true;
             }
         });
@@ -125,7 +122,7 @@ public class MedicationActivity extends AppCompatActivity {
                 for (int currentMonth = 12; currentMonth >= 1; currentMonth--) { //loop through the months
                     List<Medication> medicationsInAMonth = Utilities.medicationsInAMonth(medications, currentYear, currentMonth);
                     if (medicationsInAMonth.size() > 0) {
-                        MedicationListSection listSection = new MedicationListSection(medicationsInAMonth);
+                        MedicationListSection listSection = new MedicationListSection(MedicationActivity.this, medicationsInAMonth);
                         listSection.setDeleteImageClickListener(v -> {
                             Medication vTag = (Medication) v.getTag();
                             medicationViewModel.deleteSingleMedication(vTag);
@@ -186,6 +183,7 @@ public class MedicationActivity extends AppCompatActivity {
             String displayName = account.getDisplayName();
             Uri photoUrl = account.getPhotoUrl();
 
+            //Toast.makeText(this, "Welcome, "+displayName, Toast.LENGTH_LONG).show();
             userViewModel.fetchSingleUserByEmail(email, user -> {
                 if(user == null){
                     //user does not exist

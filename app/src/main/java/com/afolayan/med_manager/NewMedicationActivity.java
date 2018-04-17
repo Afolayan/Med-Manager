@@ -1,8 +1,5 @@
 package com.afolayan.med_manager;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,7 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,11 +20,10 @@ import android.widget.Spinner;
 import com.afolayan.med_manager.adapter.FrequencyListAdapter;
 import com.afolayan.med_manager.database.model.Medication;
 import com.afolayan.med_manager.database.viewmodel.MedicationViewModel;
+import com.afolayan.med_manager.job.SetReminderJob;
 import com.afolayan.med_manager.model.Frequency;
-import com.afolayan.med_manager.receivers.AlarmReceiver;
 import com.afolayan.med_manager.utils.AccountUtils;
 import com.afolayan.med_manager.utils.Utilities;
-import com.google.gson.Gson;
 import com.leavjenn.smoothdaterangepicker.date.SmoothDateRangePickerFragment;
 
 import java.text.SimpleDateFormat;
@@ -38,26 +33,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
-import static com.afolayan.med_manager.utils.Utilities.MEDICATION;
 import static com.afolayan.med_manager.utils.Utilities.addReminder;
 
 public class NewMedicationActivity extends AppCompatActivity implements View.OnClickListener, TimePickerDialogFragment.OnTimeSet {
 
     private static final String TAG = NewMedicationActivity.class.getSimpleName();
     private static final int REQUEST_READ_CALENDAR = 90;
-    Toolbar toolbar;
 
-    EditText etMedicationName, etMedicationDescription;
-    Spinner frequencySpinner;
-    Button btnSelectPeriod, btnChooseTime;
+    private EditText etMedicationName, etMedicationDescription;
+    private Spinner frequencySpinner;
+    private Button btnSelectPeriod, btnChooseTime;
 
     int selectedHour = 0, selectedMin = 0;
     Date startDate, endDate;
 
     Medication mMedication;
 
-    AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
+    private AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             Frequency frequency = loadFrequencyTypes().get(position);
@@ -75,7 +67,7 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_medication);
 
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.new_medication);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v->finish());
@@ -175,19 +167,11 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
 
         //use frequency value to setup reminders
         long days = Utilities.getDateDiff(startDate, endDate, TimeUnit.DAYS);
-        Log.e(TAG, "processDone: date diff-> "+days );
 
-        Intent notifierIntent = new Intent(this, AlarmReceiver.class);
-        notifierIntent.putExtra(MEDICATION, new Gson().toJson(medication));
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        PendingIntent alarmPendingIntent = PendingIntent.getService(this, 100,
-                notifierIntent, FLAG_UPDATE_CURRENT);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
-        if (alarmManager != null) {
-            int intervalMillis = 60 * 60 * selectedFrequency.getCount() * 1000;
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, startDate.getTime(), intervalMillis, alarmPendingIntent);
-        }
+        SetReminderJob.setReminder(medication);
+
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED
@@ -307,7 +291,6 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
         Frequency afterMeal = new Frequency("After each meal", 3, 0.5);
         Frequency sixHours = new Frequency("Every 6 hours", 4, 0.5);
         Frequency everyHour = new Frequency("Every 1 hour", 1, 0.5);
-        Frequency everyFiveMins = new Frequency("Every 5 minutes", 5, 0.5);
 
         frequencies.add(onceFrequency);
         frequencies.add(twiceADay);
@@ -315,7 +298,6 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
         frequencies.add(afterMeal);
         frequencies.add(sixHours);
         frequencies.add(everyHour);
-        frequencies.add(everyFiveMins);
 
         return frequencies;
     }
@@ -327,7 +309,7 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
         Calendar timeCalendar = Calendar.getInstance();
         timeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         timeCalendar.set(Calendar.MINUTE, minute);
-        String timee = Utilities.TIME_ONLY_FORMAT.format(timeCalendar.getTime());
-        btnChooseTime.setText(timee);
+        String timeString = Utilities.TIME_ONLY_FORMAT.format(timeCalendar.getTime());
+        btnChooseTime.setText(timeString);
     }
 }
