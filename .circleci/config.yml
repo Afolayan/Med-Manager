@@ -6,7 +6,6 @@ version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
       - image: circleci/android:api-25-alpha
 #      - image: circleci/openjdk:8-jdk
 
@@ -21,8 +20,6 @@ jobs:
       # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
       TERM: dumb
-
-
 
     steps:
       - checkout
@@ -42,12 +39,11 @@ jobs:
           name: Download Dependencies
           command: ./gradlew androidDependencies
 
-
       - save_cache:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-        
+
       - run:
           name: Run Tests
           command: ./gradlew lint test
@@ -56,7 +52,6 @@ jobs:
           destination: reports
       - store_test_results:
           path: app/build/test-results
-      post:
-          - ./cc-test-reporter after-build --exit-code $EXIT_CODE
+
 
 
