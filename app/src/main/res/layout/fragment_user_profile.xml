@@ -44,7 +44,7 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/colorPrimary"
                 android:textSize="15sp"
-                android:hint="@string/name"
+                android:hint=""
                 android:theme="@style/EditTextTheme" />
 
         </android.support.design.widget.TextInputLayout>
@@ -78,7 +78,7 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/colorPrimary"
                 android:textSize="15sp"
-                android:hint="@string/age"
+                android:hint=""
                 android:theme="@style/EditTextTheme" />
 
         </android.support.design.widget.TextInputLayout>
@@ -104,7 +104,7 @@
                 android:textColor="@color/colorPrimary"
                 android:textColorHint="@color/white"
                 android:textSize="15sp"
-                android:hint="@string/allergies"
+                android:hint=""
                 android:theme="@style/EditTextTheme" />
 
         </android.support.design.widget.TextInputLayout>

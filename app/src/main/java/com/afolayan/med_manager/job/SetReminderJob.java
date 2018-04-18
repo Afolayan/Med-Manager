@@ -42,13 +42,14 @@ public class SetReminderJob extends Job {
         String channelId = getContext().getString(R.string.app_name);
         String appName = getContext().getString(R.string.app_name);
         String title = appName + " Reminder";
-        String reminderName = bundleCompat.getString("name", "");
+        String medicationName = bundleCompat.getString("name", "");
         String reminderDesc = bundleCompat.getString("desc", "");
+        reminderDesc = String.format("Details: \n%s", reminderDesc);
         long from = bundleCompat.getLong("from", 0);
         long to = bundleCompat.getLong("to", 0);
         long id = bundleCompat.getLong("id", 0);
         boolean isFirstTime = bundleCompat.getBoolean("isFirstTime", true);
-        String contentText = reminderName +" is to be used now";
+        String contentText = String.format("It's time to use %s", medicationName);
         Notification notification = new NotificationCompat.Builder(getContext(), channelId)
                 .setContentTitle(title)
                 .setContentText(contentText)

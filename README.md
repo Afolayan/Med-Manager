@@ -12,7 +12,7 @@ This is an intermediate Android app project for the Andela-Udacity ALC Program
 
 # Libraries Used
 
-Dillinger uses a number of open source projects to work properly:
+MedManager uses a number of open source projects to work properly:
 
 * [Android Room] - Android Architecture Component/Database
 * [Google GSON] - For working with JSON strings
