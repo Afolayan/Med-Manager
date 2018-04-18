@@ -24,6 +24,8 @@ Dillinger uses a number of open source projects to work properly:
 * [Evernote Android Job] - For Implementing Reminders
 
 ### CI Tool
+
 Circle CI
-URL: https://circleci.com/gh/Afolayan
+
+* URL: https://circleci.com/gh/Afolayan
 
