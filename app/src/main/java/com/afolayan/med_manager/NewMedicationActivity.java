@@ -27,12 +27,11 @@ import com.afolayan.med_manager.utils.Utilities;
 import com.leavjenn.smoothdaterangepicker.date.SmoothDateRangePickerFragment;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.afolayan.med_manager.model.Frequency.loadFrequencyTypes;
 import static com.afolayan.med_manager.utils.Utilities.addReminder;
 
 public class NewMedicationActivity extends AppCompatActivity implements View.OnClickListener, TimePickerDialogFragment.OnTimeSet {
@@ -179,25 +178,19 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
 
             // Permission is not granted
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    android.Manifest.permission.READ_CALENDAR) || ActivityCompat.shouldShowRequestPermissionRationale(this,
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.READ_CALENDAR) && !ActivityCompat.shouldShowRequestPermissionRationale(this,
                     android.Manifest.permission.WRITE_CALENDAR)) {
 
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+                        // No explanation needed; request the permission
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{android.Manifest.permission.READ_CALENDAR, android.Manifest.permission.WRITE_CALENDAR},
+                                REQUEST_READ_CALENDAR);
 
-            } else {
-
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(this,
-                        new String[]{android.Manifest.permission.READ_CALENDAR, android.Manifest.permission.WRITE_CALENDAR},
-                        REQUEST_READ_CALENDAR);
-
-                // REQUEST_READ_CALENDAR is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
+                        // REQUEST_READ_CALENDAR is an
+                        // app-defined int constant. The callback method gets the
+                        // result of the request.
+                    }
         } else {
             // Permission has already been granted
             addReminder(this, medication);
@@ -234,14 +227,12 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
                     if(mMedication != null) {
                         addReminder(this, mMedication);
                     }
                 } else {
 
-                    // permission denied, boo! Disable the
+                    // permission denied. Disable the
                     // functionality that depends on this permission.
                     ActivityCompat.requestPermissions(this,
                             new String[]{android.Manifest.permission.READ_CALENDAR, android.Manifest.permission.WRITE_CALENDAR},
@@ -249,9 +240,6 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
                 }
                 break;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
         }
     }
 
@@ -282,25 +270,6 @@ public class NewMedicationActivity extends AppCompatActivity implements View.OnC
 
     }
 
-    private List<Frequency> loadFrequencyTypes(){
-        List<Frequency> frequencies = new ArrayList<>();
-
-        Frequency onceFrequency = new Frequency("Once a day", 1, 0.5);
-        Frequency twiceADay = new Frequency("Twice a day", 2, 0.5);
-        Frequency thriceADay = new Frequency("Three time a day", 3, 0.5);
-        Frequency afterMeal = new Frequency("After each meal", 3, 0.5);
-        Frequency sixHours = new Frequency("Every 6 hours", 4, 0.5);
-        Frequency everyHour = new Frequency("Every 1 hour", 1, 0.5);
-
-        frequencies.add(onceFrequency);
-        frequencies.add(twiceADay);
-        frequencies.add(thriceADay);
-        frequencies.add(afterMeal);
-        frequencies.add(sixHours);
-        frequencies.add(everyHour);
-
-        return frequencies;
-    }
 
     @Override
     public void onTimeSet(int hourOfDay, int minute) {
