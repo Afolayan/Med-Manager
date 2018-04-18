@@ -21,4 +21,9 @@ Dillinger uses a number of open source projects to work properly:
 * [Picasso] - Image Loading Library
 * [JUnit] - Android Test Framework
 * [Espresso] - Android Instrumented Test Framework
-* [Evernote Job] - For Implementing Reminders
+* [Evernote Android Job] - For Implementing Reminders
+
+### CI Tool
+Circle CI
+URL: https://circleci.com/gh/Afolayan
+
