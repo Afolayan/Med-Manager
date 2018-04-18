@@ -166,11 +166,8 @@ public class MedicationActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
-            // Signed in successfully, show authenticated UI.
             updateUI(account);
         } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the   class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
         }
     }
