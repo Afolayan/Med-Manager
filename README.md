@@ -10,7 +10,7 @@ This is an intermediate Android app project for the Andela-Udacity ALC Program
     - The app should be able to categorize medication intake by month
     - Users should be able to search for medication by name
 
-### Libraries Used
+# Libraries Used
 
 Dillinger uses a number of open source projects to work properly:
 
