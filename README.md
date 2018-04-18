@@ -2,7 +2,7 @@
 
 This is an intermediate Android app project for the Andela-Udacity ALC Program
 # Features
-#
+
     - Users should be able to signup / login with Google social authentication
     - Users should be able to update their profile
     - Users should be able to add medication. Medication information should include the Name, description, Frequency or interval, Start and End date
